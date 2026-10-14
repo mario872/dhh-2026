@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-with open("data_structure.json", "r") as f:
+with open("data.json", "r") as f:
     data_structure = json.load(f)
 
 app = FastAPI(
