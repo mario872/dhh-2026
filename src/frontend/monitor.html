@@ -42,7 +42,7 @@
 
             async function loadUsageData() {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/student/{CURRENT_STUDENT_ID}/usage`);
+                    const response = await fetch('http://127.0.0.1:8000/student/${CURRENT_STUDENT_ID}/usage');
                     
                     if (!response.ok) {
                         throw new Error('Could not fetch student usage details');
