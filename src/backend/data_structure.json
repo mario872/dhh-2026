@@ -1,0 +1,76 @@
+{
+    "config": {
+        "models": {
+            "basic": {
+                "cost": 0.000002
+            },
+            "pro": {
+                "cost": 0.00006
+            }
+        },
+        "plans": {
+            "starter": {
+                "cost": 199,
+                "included_tokens": 1500000,
+                "overage_cost": 0.00008,
+                "models": ["basic"]
+            },
+            "standard": {
+                "cost": 490,
+                "included_tokens": 5000000,
+                "overage_cost": 0.000065,
+                "models": ["basic", "pro"]
+            },
+            "pro": {
+                "cost": 890,
+                "included_tokens": 12000000,
+                "overage_cost": 0.000045,
+                "models": ["basic", "pro", "advanced"]
+            },
+            "payg": {
+                "cost": 0,
+                "included_tokens": 0,
+                "overage_cost": 0.000075,
+                "models": ["basic", "pro"]
+            }
+        },
+        "current_plan": "standard"
+    },
+    "students": [
+        {
+            "name": "John Smith", 
+            "user_name": "john.smith",
+            "id": 1234,
+            "year": 10,
+            "classes": [
+                "English",
+                "Math",
+                "Science",
+                "History",
+                "Computing"
+            ],
+            "chats": [
+                {
+                    "chat_id": "dytfug345dwc",
+                    "model": "pro",
+                    "chat_category": "writing",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 20, "datetime": 1780636665},
+                        {"type": "text", "role": "user", "message": "write essay japana, long, detailed", "tokens": 10, "datetime": 1780636665},
+                        {"type": "text", "role": "assistant", "message": "Sure! Here is a long and detailed essay about Japan...", "tokens": 1500, "datetime": 1780636694}
+                    ]
+                },
+                {
+                    "chat_id": "dytfug345dwc",
+                    "model": "basic",
+                    "chat_category": "step-by-step",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 20, "datetime": 1780781479},
+                        {"type": "text", "role": "user", "message": "answer maths question 3+4=?", "tokens": 10, "datetime": 1780781479},
+                        {"type": "text", "role": "assistant", "message": "The answer is 7.", "tokens": 8, "datetime": 1780781493}
+                    ]
+                }
+            ]
+        }
+    ]
+}
