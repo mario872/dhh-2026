@@ -38,7 +38,7 @@
         </div>
         <script>
             // Adjust this ID dynamically based on your logged-in session later
-            const CURRENT_STUDENT_ID = 1234; 
+            const CURRENT_STUDENT_ID = 10000; 
 
             async function loadUsageData() {
                 try {
@@ -50,7 +50,7 @@
 
                     const data = await response.json();
                     const usage = data.usage;
-                    const totalMessages = usage.user.all.length + usage.assistant.all.length;
+                    const totalMessages = usage.user.all.length;
                     const waterEstimation = usage.raw_tokens * 0.002;
 
                     document.getElementById('messages-sent').innerText = totalMessages;
