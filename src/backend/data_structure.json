@@ -38,7 +38,7 @@
     },
     "students": [
         {
-            "name": "John Smith", 
+            "name": "John Smith",
             "user_name": "john.smith",
             "id": 1234,
             "year": 10,
@@ -53,7 +53,7 @@
                 {
                     "chat_id": "dytfug345dwc",
                     "model": "pro",
-                    "chat_category": "writing",
+                    "chat_category": "Long creative writing",
                     "content": [
                         {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 20, "datetime": 1780636665},
                         {"type": "text", "role": "user", "message": "write essay japana, long, detailed", "tokens": 10, "datetime": 1780636665},
@@ -63,11 +63,192 @@
                 {
                     "chat_id": "dytfug345dwc",
                     "model": "basic",
-                    "chat_category": "step-by-step",
+                    "chat_category": "Maths step-by-step",
                     "content": [
                         {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 20, "datetime": 1780781479},
                         {"type": "text", "role": "user", "message": "answer maths question 3+4=?", "tokens": 10, "datetime": 1780781479},
                         {"type": "text", "role": "assistant", "message": "The answer is 7.", "tokens": 8, "datetime": 1780781493}
+                    ]
+                },
+                {
+                    "chat_id": "jhn6a2kq9mvr",
+                    "model": "basic",
+                    "chat_category": "Maths step-by-step",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 24, "datetime": 1781023841},
+                        {"type": "text", "role": "user", "message": "Can you show me how to factor x squared plus 7x plus 12?", "tokens": 17, "datetime": 1781023847},
+                        {"type": "text", "role": "assistant", "message": "Find two numbers that multiply to 12 and add to 7: 3 and 4. So x² + 7x + 12 = (x + 3)(x + 4).", "tokens": 46, "datetime": 1781023872},
+                        {"type": "text", "role": "user", "message": "Why do the signs stay positive?", "tokens": 8, "datetime": 1781023905},
+                        {"type": "text", "role": "assistant", "message": "Both numbers are positive because the middle term is positive and the constant term is positive.", "tokens": 22, "datetime": 1781023921}
+                    ]
+                },
+                {
+                    "chat_id": "jhn9w4pe1xct",
+                    "model": "pro",
+                    "chat_category": "Essay Feedback",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 28, "datetime": 1781199064},
+                        {"type": "text", "role": "user", "message": "Give feedback on my introduction for an essay about whether the Treaty of Versailles caused World War Two.", "tokens": 24, "datetime": 1781199079},
+                        {"type": "text", "role": "assistant", "message": "I can help with that. Paste your introduction and I will comment on the argument, evidence, and clarity.", "tokens": 25, "datetime": 1781199093},
+                        {"type": "text", "role": "user", "message": "The Treaty of Versailles was unfair to Germany and made people angry, which helped Hitler come to power.", "tokens": 22, "datetime": 1781199138},
+                        {"type": "text", "role": "assistant", "message": "This is a clear starting claim. Make it more specific by linking reparations, territorial losses, and political instability to the rise of extremist support. You could also signal that the treaty was one cause among several.", "tokens": 67, "datetime": 1781199176}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Mia Patel",
+            "user_name": "mia.patel",
+            "id": 1235,
+            "year": 8,
+            "classes": ["English", "Math", "Science", "Geography", "Art"],
+            "chats": [
+                {
+                    "chat_id": "mia2r8vz4lpn",
+                    "model": "basic",
+                    "chat_category": "Short factual Q&A",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 23, "datetime": 1780871182},
+                        {"type": "text", "role": "user", "message": "What is the difference between mass and weight?", "tokens": 10, "datetime": 1780871191},
+                        {"type": "text", "role": "assistant", "message": "Mass is the amount of matter in an object and is measured in kilograms. Weight is the force of gravity on that mass and is measured in newtons.", "tokens": 35, "datetime": 1780871214},
+                        {"type": "text", "role": "user", "message": "So would my mass change on the Moon?", "tokens": 10, "datetime": 1780871248},
+                        {"type": "text", "role": "assistant", "message": "No. Your mass stays the same, but your weight would be lower because the Moon has weaker gravity.", "tokens": 23, "datetime": 1780871262}
+                    ]
+                },
+                {
+                    "chat_id": "mia7f3kq0bde",
+                    "model": "pro",
+                    "chat_category": "Debate argument builder",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 29, "datetime": 1781285629},
+                        {"type": "text", "role": "user", "message": "Help me plan a short persuasive speech about reducing plastic waste at school.", "tokens": 15, "datetime": 1781285640},
+                        {"type": "text", "role": "assistant", "message": "A strong structure is: hook the audience with a fact, explain the problem at school, give two realistic solutions, address a possible objection, and finish with a clear call to action.", "tokens": 53, "datetime": 1781285668},
+                        {"type": "text", "role": "user", "message": "Can you give me a hook but not write the whole speech?", "tokens": 14, "datetime": 1781285703},
+                        {"type": "text", "role": "assistant", "message": "Try: ‘By the end of this week, our school bins will hold hundreds of single-use bottles that were used for only a few minutes.’", "tokens": 36, "datetime": 1781285725}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Noah Williams",
+            "user_name": "noah.williams",
+            "id": 1236,
+            "year": 9,
+            "classes": ["English", "Math", "Science", "History", "Design Technology"],
+            "chats": [
+                {
+                    "chat_id": "nwh1c6st8yga",
+                    "model": "basic",
+                    "chat_category": "Maths step-by-step",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 24, "datetime": 1780947061},
+                        {"type": "text", "role": "user", "message": "I got 18 out of 24 on a test. What percentage is that?", "tokens": 16, "datetime": 1780947074},
+                        {"type": "text", "role": "assistant", "message": "Divide 18 by 24 to get 0.75, then multiply by 100. Your score is 75%.", "tokens": 25, "datetime": 1780947091}
+                    ]
+                },
+                {
+                    "chat_id": "nwh5u9dm2rex",
+                    "model": "pro",
+                    "chat_category": "Research summary",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 31, "datetime": 1781364950},
+                        {"type": "text", "role": "user", "message": "Explain the main causes of the Industrial Revolution for a Year 9 history assignment.", "tokens": 17, "datetime": 1781364963},
+                        {"type": "text", "role": "assistant", "message": "Key causes included access to coal and iron, investment capital, agricultural changes that increased food production, a growing population, colonial trade networks, and inventions that mechanised textile production. For an assignment, explain how at least two of these causes worked together.", "tokens": 82, "datetime": 1781365020},
+                        {"type": "text", "role": "user", "message": "Which two would be easiest to link together?", "tokens": 10, "datetime": 1781365077},
+                        {"type": "text", "role": "assistant", "message": "Coal and steam power are a straightforward pair: abundant coal fuelled steam engines, and those engines powered factories, mines, and transport.", "tokens": 32, "datetime": 1781365099}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Sofia Nguyen",
+            "user_name": "sofia.nguyen",
+            "id": 1237,
+            "year": 11,
+            "classes": ["English", "Mathematics", "Biology", "Chemistry", "Modern History"],
+            "chats": [
+                {
+                    "chat_id": "sng8p2la6wqj",
+                    "model": "pro",
+                    "chat_category": "Short factual Q&A",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 30, "datetime": 1781114320},
+                        {"type": "text", "role": "user", "message": "Make a revision plan for biology and chemistry. I have a test in ten days and about one hour each night.", "tokens": 25, "datetime": 1781114342},
+                        {"type": "text", "role": "assistant", "message": "Use six content-review sessions, two mixed-practice sessions, one weak-topic session, and one light review the night before. Alternate subjects each night, and spend the last ten minutes recalling key ideas without notes.", "tokens": 62, "datetime": 1781114385},
+                        {"type": "text", "role": "user", "message": "Should I do flashcards or practice questions first?", "tokens": 11, "datetime": 1781114428},
+                        {"type": "text", "role": "assistant", "message": "Start with a short flashcard review to identify gaps, then spend most of the hour on practice questions. Retrieval plus application usually gives you better feedback than rereading notes.", "tokens": 51, "datetime": 1781114456}
+                    ]
+                },
+                {
+                    "chat_id": "sng3x7cf1mkt",
+                    "model": "basic",
+                    "chat_category": "Short factual Q&A",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 25, "datetime": 1781452227},
+                        {"type": "text", "role": "user", "message": "What does standard deviation tell you in a data set?", "tokens": 13, "datetime": 1781452241},
+                        {"type": "text", "role": "assistant", "message": "Standard deviation describes how spread out values are from the mean. A small standard deviation means most values are close to the mean; a large one means they are more spread out.", "tokens": 48, "datetime": 1781452270}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Ethan Brown",
+            "user_name": "ethan.brown",
+            "id": 1238,
+            "year": 7,
+            "classes": ["English", "Math", "Science", "Geography", "Music"],
+            "chats": [
+                {
+                    "chat_id": "ebr4n0qv7hls",
+                    "model": "basic",
+                    "chat_category": "Maths step-by-step",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 21, "datetime": 1780968843},
+                        {"type": "text", "role": "user", "message": "How do I turn 3 quarters into a fraction?", "tokens": 10, "datetime": 1780968852},
+                        {"type": "text", "role": "assistant", "message": "Three quarters is already written as the fraction 3/4. The top number tells you how many parts you have, and the bottom number tells you how many equal parts make one whole.", "tokens": 47, "datetime": 1780968880},
+                        {"type": "text", "role": "user", "message": "What is it as a decimal?", "tokens": 7, "datetime": 1780968901},
+                        {"type": "text", "role": "assistant", "message": "3/4 is 0.75.", "tokens": 7, "datetime": 1780968912}
+                    ]
+                },
+                {
+                    "chat_id": "ebr9d5zu3fca",
+                    "model": "basic",
+                    "chat_category": "Long creative writing",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 22, "datetime": 1781539086},
+                        {"type": "text", "role": "user", "message": "I need ideas for a story set during a storm at sea.", "tokens": 13, "datetime": 1781539100},
+                        {"type": "text", "role": "assistant", "message": "You could begin with a junior deckhand noticing that the lighthouse light has disappeared. The character then has to choose whether to follow a damaged radio signal or help repair the ship before it reaches the rocks.", "tokens": 61, "datetime": 1781539135}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Ava Robinson",
+            "user_name": "ava.robinson",
+            "id": 1239,
+            "year": 10,
+            "classes": ["English", "Math", "Physics", "Business", "Computing"],
+            "chats": [
+                {
+                    "chat_id": "aro6m1kb9twp",
+                    "model": "pro",
+                    "chat_category": "Short factual Q&A",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 32, "datetime": 1781049930},
+                        {"type": "text", "role": "user", "message": "Why does my Python loop print the same item over and over?", "tokens": 13, "datetime": 1781049947},
+                        {"type": "text", "role": "assistant", "message": "This often happens when the print statement uses a fixed index or when the loop variable is not being used. Share the loop and I can point to the exact line.", "tokens": 41, "datetime": 1781049976},
+                        {"type": "text", "role": "user", "message": "for i in range(len(names)): print(names[0])", "tokens": 15, "datetime": 1781050012},
+                        {"type": "text", "role": "assistant", "message": "names[0] always selects the first item. Change it to names[i] so the index changes on each loop: for i in range(len(names)): print(names[i]).", "tokens": 43, "datetime": 1781050034}
+                    ]
+                },
+                {
+                    "chat_id": "aro0y8jn2vfd",
+                    "model": "basic",
+                    "chat_category": "Maths step-by-step",
+                    "content": [
+                        {"type": "text", "role": "system", "message": "You are a conversational AI designed to help...", "tokens": 23, "datetime": 1781624118},
+                        {"type": "text", "role": "user", "message": "A car travels 120 km in 2 hours. What is its average speed?", "tokens": 16, "datetime": 1781624135},
+                        {"type": "text", "role": "assistant", "message": "Average speed equals distance divided by time: 120 km ÷ 2 h = 60 km/h.", "tokens": 24, "datetime": 1781624154}
                     ]
                 }
             ]
