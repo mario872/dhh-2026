@@ -1,5 +1,6 @@
 import json
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 with open("data_structure.json", "r") as f:
@@ -11,6 +12,16 @@ app = FastAPI(
         "A small API for looking up student chat data and usage. "
         "Open `/docs` while the server is running to try each route."
     ),
+)
+
+origins = ["http://localhost:5001", "http://127.0.0.1:5001"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # Allows requests from these origins
+    allow_credentials=True,         # Allows cookies/auth headers
+    allow_methods=["*"],            # Allows all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],            # Allows all request headers
 )
 
 @app.get(
