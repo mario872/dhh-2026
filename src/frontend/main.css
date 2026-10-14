@@ -59,3 +59,37 @@ h2 {
     align-self: center;
     font-family: roboto;
   }
+  .grid-container {
+  display: grid;
+  width: 90%;
+  padding-left: 5%;
+  padding-right: 5%;
+  column-gap: 2.5%;
+  grid-template-columns: repeat(4, 1fr); 
+}
+
+.box {
+  background-color: #bcbcbc;
+  color: black;
+  padding: 20px;
+  text-align: center;
+  border-radius: 4px;
+  font-family: roboto;
+}
+
+.box-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: black;
+  font-weight: 600;
+  font-family: roboto;
+}
+
+.box-value {
+  font-size: 1.75rem; 
+  font-weight: 700;
+  color: black;
+  margin-top: 8px; 
+  font-family: roboto;
+}
