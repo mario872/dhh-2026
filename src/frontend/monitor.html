@@ -20,21 +20,53 @@
         <h2 style="font-weight: bold;">Your Usage This Month</h2>
         <div class="grid-container">
             <div class="box">
-                    <span class="box-heading">Messages Sent</span><br/>
-                    <span class="box-value">x</span>
+                <span class="box-heading">Messages Sent</span><br/>
+                <span class="box-value" id="messages-sent">...</span>
             </div>
             <div class="box">
-                    <span class="box-heading">Tokens Used</span><br/>
-                    <span class="box-value">x</span>
+                <span class="box-heading">Tokens Used</span><br/>
+                <span class="box-value" id="tokens-used">...</span>
             </div>
             <div class="box">
                 <span class="box-heading">Liters of water used</span><br/>
-                <span class="box-value">x</span>
+                <span class="box-value" id="water-used">...</span>
             </div>
             <div class="box">
                 <span class="box-heading">Message Cost</span><br/>
-                <span class="box-value">x</span>
+                <span class="box-value" id="message-cost">...</span>
             </div>
         </div>
+        <script>
+            // Adjust this ID dynamically based on your logged-in session later
+            const CURRENT_STUDENT_ID = 1234; 
+
+            async function loadUsageData() {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/student/{CURRENT_STUDENT_ID}/usage`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Could not fetch student usage details');
+                    }
+
+                    const data = await response.json();
+                    const usage = data.usage;
+                    const totalMessages = usage.user.all.length + usage.assistant.all.length;
+                    const waterEstimation = usage.raw_tokens * 0.002;
+
+                    document.getElementById('messages-sent').innerText = totalMessages;
+                    document.getElementById('tokens-used').innerText = usage.raw_tokens.toLocaleString();
+                    document.getElementById('water-used').innerText = waterEstimation.toFixed(1);
+                    document.getElementById('message-cost').innerText = `$${usage.cost.toFixed(4)}`;
+
+                } catch (error) {
+                    console.error("Error connecting to backend API:", error);
+                    document.getElementById('messages-sent').innerText = 'Err';
+                    document.getElementById('tokens-used').innerText = 'Err';
+                    document.getElementById('water-used').innerText = 'Err';
+                    document.getElementById('message-cost').innerText = 'Err';
+                }
+            }
+            window.addEventListener('DOMContentLoaded', loadUsageData);
+        </script>
     </body>
 </html>
