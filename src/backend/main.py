@@ -5,32 +5,76 @@ import uvicorn
 with open("data_structure.json", "r") as f:
     data_structure = json.load(f)
 
-app = FastAPI()
+app = FastAPI(
+    title="Student chat data API",
+    description=(
+        "A small API for looking up student chat data and usage. "
+        "Open `/docs` while the server is running to try each route."
+    ),
+)
 
-@app.get("/")
+@app.get(
+    "/",
+    summary="Check that the API is running",
+    description="Returns a short welcome message. Use this as a quick health check.",
+)
 def index():
+    """Return a simple message to confirm that the backend is available."""
     return {"message": "Welcome to the FastAPI backend!"}
 
-@app.get("/data")
+@app.get(
+    "/data",
+    summary="Get all stored data",
+    description=(
+        "Returns the complete data set, including settings and every student. "
+        "This is useful for inspecting the raw data, but it can be a large response."
+    ),
+)
 def get_data():
+    """Return the full contents of `data_structure.json`."""
     return data_structure
 
-@app.post("/data")
+@app.post(
+    "/data",
+    summary="Update stored data",
+    description=(
+        "Sends new JSON data to the backend. Any top-level fields in the request "
+        "replace fields with the same name in the current data, then the updated data "
+        "is saved to `data_structure.json`."
+    ),
+)
 def post_data(new_data: dict):
+    """Merge the supplied top-level data into the saved data file."""
     data_structure.update(new_data)
     with open("data_structure.json", "w") as f:
         json.dump(data_structure, f)
     return {"message": "Data updated successfully"}
 
-@app.get("/student/get_id/{user_name}")
+@app.get(
+    "/student/get_id/{user_name}",
+    summary="Find a student ID from a username",
+    description=(
+        "Put the student's username in the URL, for example `/student/get_id/john.smith`. "
+        "Returns the student's numeric ID, or a 404 error if no matching username exists."
+    ),
+)
 def get_student_id(user_name: str):
+    """Look through the students and return the ID for one username."""
     for student in data_structure.get("students", []):
         if student.get("user_name") == user_name:
             return {"student_id": student.get("id")}
     raise HTTPException(status_code=404, detail="Student username not found")
 
-@app.get("/student/{id}/chat_categories")
+@app.get(
+    "/student/{id}/chat_categories",
+    summary="Count a student's chats by category",
+    description=(
+        "Put a student ID in the URL. The response lists each chat category and how many "
+        "of that student's chats belong to it."
+    ),
+)
 def get_student_chat_categories(id: int):
+    """Count this student's chats, grouped by their category."""
     for student in data_structure.get("students", []):
         if student.get("id") == id:
             categories = {}
@@ -42,8 +86,17 @@ def get_student_chat_categories(id: int):
             return {"chat_categories": categories}
     raise HTTPException(status_code=404, detail="Student ID not found")
 
-@app.get("/student/{id}/usage")
+@app.get(
+    "/student/{id}/usage",
+    summary="Get a student's token use and estimated cost",
+    description=(
+        "Adds up tokens across all of a student's chats and estimates the cost using the "
+        "price for each model. It also separates messages written by the student and the AI. "
+        "`raw_average` is the average number of tokens per message."
+    ),
+)
 def get_student_usage(id: int):
+    """Calculate overall token use, estimated cost, and message averages for one student."""
     for student in data_structure.get("students", []):
         if student.get("id") == id:
             usage = {
@@ -74,8 +127,17 @@ def get_student_usage(id: int):
             return {"usage": usage}
     raise HTTPException(status_code=404, detail="Student ID not found")
 
-@app.get("/student/{id}/chat_categories/usage")
+@app.get(
+    "/student/{id}/chat_categories/usage",
+    summary="Compare token use across chat categories",
+    description=(
+        "Groups one student's message token counts by chat category and by who sent the "
+        "message (`user` or `assistant`). `all` contains every count and `raw_average` "
+        "is the average count for that group."
+    ),
+)
 def get_student_chat_categories_usage(id: int):
+    """Group one student's message token counts by chat category."""
     for student in data_structure.get("students", []):
         if student.get("id") == id:
             categories_usage = {}
@@ -97,8 +159,16 @@ def get_student_chat_categories_usage(id: int):
             return {"chat_categories_usage": categories_usage}
     raise HTTPException(status_code=404, detail="Student ID not found")
 
-@app.get("/student/{id}/models/usage")
+@app.get(
+    "/student/{id}/models/usage",
+    summary="Compare token use across AI models",
+    description=(
+        "Groups one student's message token counts by the AI model used for each chat. "
+        "The result separates student and AI messages and includes an average for each."
+    ),
+)
 def get_student_models_usage(id: int):
+    """Group one student's message token counts by the AI model used."""
     for student in data_structure.get("students", []):
         if student.get("id") == id:
             models_usage = {}
@@ -120,8 +190,16 @@ def get_student_models_usage(id: int):
             return {"models_usage": models_usage}
     raise HTTPException(status_code=404, detail="Student ID not found")
 
-@app.get("/student/{id}/models/chat_categories")
+@app.get(
+    "/student/{id}/models/chat_categories",
+    summary="Count chat categories for each AI model",
+    description=(
+        "Shows how many chats a student has in each category for every AI model they used. "
+        "For example, it can show how many `basic` chats were maths chats."
+    ),
+)
 def get_student_models_chat_categories(id: int):
+    """Count this student's chat categories within each AI model."""
     for student in data_structure.get("students", []):
         if student.get("id") == id:
             models_chat_categories = {}
@@ -138,8 +216,16 @@ def get_student_models_chat_categories(id: int):
             return {"models_chat_categories": models_chat_categories}
     raise HTTPException(status_code=404, detail="Student ID not found")
 
-@app.get("/model/{model}/cost")
+@app.get(
+    "/model/{model}/cost",
+    summary="Get the price of an AI model",
+    description=(
+        "Put a model name in the URL, such as `/model/basic/cost`. The response gives the "
+        "cost per token, plus easier-to-read costs for one thousand and one million tokens."
+    ),
+)
 def get_cost(model: str):
+    """Return the configured token price for one AI model."""
     models = data_structure.get("config", {}).get("models", {})
     if model in models:
         return {
