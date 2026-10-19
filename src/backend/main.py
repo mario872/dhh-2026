@@ -246,5 +246,18 @@ def get_cost(model: str):
         }
     raise HTTPException(status_code=404, detail="Model not found")
 
+@app.get(
+    "/students",
+    summary="Get a list of all students",
+    description=(
+        "Returns a list of all students, including their IDs and usernames. "
+        "This is useful for quickly finding a student's ID without looking through the full data."
+    )
+)
+def get_students():
+    """Return a list of all students with their IDs and usernames."""
+    students = data_structure.get("students", [])
+    return [{"id": student.get("id"), "user_name": student.get("user_name")} for student in students]
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=1764)
