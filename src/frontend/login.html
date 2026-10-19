@@ -5,63 +5,135 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div class="topnavcontainer">
-            <div class="navGroup"> 
-                <nav>
-                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a> 
-                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="playground.html">Playground</a>
-                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a> 
-                </nav>
-               </div>
-               <div class="text">
-                <h1>AI Usage Monitor</h1>
-            </div>  
+    <div class="topnavcontainer">
+        <div class="navGroup"> 
+            <nav>
+                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a> 
+                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="playground.html">Playground</a>
+                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a> 
+            </nav>
         </div>
-        <h2 style="font-weight: bold;">Select an account:</h2>
-        <div class="login-wrapper">
+        <div class="text">
+            <h1>AI Usage Monitor</h1>
+        </div>  
+    </div>
+
+    <h2 style="font-weight: bold;">Select an account:</h2>
+    
+    <div class="login-wrapper">
         <div id="login-container" class="login-form">
-        <p class="dropdown-header">Select an account:</p>
+        <!-- 1. The trigger button is now on top -->
+            <button id="login-button">Switch ▼</button>
+        
+        <!-- 2. The floating menu list sits directly beneath it -->
             <ul id="user-list">
-                <!-- Usernames will be injected here -->
+            <!-- Usernames will be injected here -->
             </ul>
-        <button id="login-button">Switch</button>
         </div>
-        </div>
-        </div>
-        <script>
-            const loginButton = document.getElementById('login-button');
-            const loginContainer = document.getElementById('login-container');
-            const userList = document.getElementById('user-list');
+    </div>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginButton = document.getElementById('login-button');
+        const loginContainer = document.getElementById('login-container');
+        const userList = document.getElementById('user-list');
+        
+        if (!loginButton || !loginContainer || !userList) return;
 
-            loginButton.addEventListener('click', () => {
-                loginContainer.classList.toggle('open');});
+        // Anchor the container layout context
+        loginContainer.style.position = 'relative';
+        loginContainer.style.display = 'inline-block';
 
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                userList.innerHTML = ''; 
+        // Force-style the user-list container dropdown window
+        userList.style.display = 'none'; 
+        userList.style.position = 'absolute';
+        userList.style.top = '100%';
+        userList.style.left = '0';
+        userList.style.width = '240px';
+        userList.style.zIndex = '99999';
+        userList.style.backgroundColor = '#ffffff';
+        userList.style.border = '1px solid #bcbcbc';
+        userList.style.borderRadius = '0 0 4px 4px';
+        userList.style.listStyle = 'none'; 
+        userList.style.listStyleType = 'none';
+        userList.style.padding = '0';
+        userList.style.margin = '2px 0 0 0';
+        userList.style.maxHeight = '200px';
+        userList.style.overflowY = 'auto';
+        userList.style.boxShadow = '0px 4px 12px rgba(0, 0, 0, 0.2)';
 
-            data.students.forEach(student => {
-            const li = document.createElement('li');
-            li.classList.add('user-item');
-            li.textContent = student.user_name; // Displays the user_name string
-
-            // Handle what happens when a sample account is selected
-            li.addEventListener('click', () => {
-            console.log(`Logged in as: ${student.user_name} (ID: ${student.id})`);
-            loginButton.innerHTML = `${student.user_name} ▼`;
-            loginContainer.classList.remove('open');
-            });
-            userList.appendChild(li);});})
-            .catch(error => {
-            console.error('Error loading user data:', error);
-            userList.innerHTML = '<li class="user-item" style="color:red;">Error loading users</li>';});
-            window.addEventListener('click', (e) => {
-            if (!loginButton.contains(e.target) && !loginContainer.contains(e.target)) {
-            loginContainer.classList.remove('open');
+        // Toggle dropdown functionality
+        loginButton.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            if (userList.style.display === 'block') {
+                userList.style.display = 'none';
+            } else {
+                userList.style.display = 'block';
             }
+        });
+
+        userList.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Fetch the student array from your backend API
+        fetch('http://127.0.0.1:8000/students')
+            .then(response => response.json())
+            .then(studentsArray => {
+                userList.innerHTML = '';
+
+                if (!Array.isArray(studentsArray) || studentsArray.length === 0) {
+                    userList.innerHTML = '<li style="color:gray; padding:12px 15px; font-family:sans-serif; list-style:none;">No accounts found</li>';
+                    return;
+                }
+
+                // Cleanly loop through each student object in the response array
+                studentsArray.forEach(student => {
+                    const li = document.createElement('li');
+                    
+                    // Directly pull the "user_name" property from the API object
+                    li.textContent = student.user_name;
+
+                    // Layout & hit-box styling
+                    li.style.display = 'block';         
+                    li.style.width = '100%';            
+                    li.style.boxSizing = 'border-box';  
+                    li.style.padding = '12px 15px';     
+                    li.style.cursor = 'pointer';        
+                    li.style.color = '#000000';         
+                    li.style.backgroundColor = '#ffffff';
+                    li.style.textAlign = 'left';
+                    li.style.fontSize = '1rem';
+                    li.style.fontFamily = 'sans-serif';
+                    li.style.borderBottom = '1px solid #f0f0f0';
+                    li.style.listStyleType = 'none';
+
+                    // Hover styling animations
+                    li.addEventListener('mouseenter', () => { li.style.backgroundColor = '#f5f5f5'; });
+                    li.addEventListener('mouseleave', () => { li.style.backgroundColor = '#ffffff'; });
+
+                    // Click account selection behavior
+                    li.addEventListener('click', () => {
+                        console.log(`Logged in as: ${student.user_name} (ID: ${student.id})`);
+                        
+                        // Update the button text to display the chosen user_name
+                        loginButton.innerHTML = `<span>${student.user_name}</span> <span>▼</span>`;
+                        userList.style.display = 'none';
+                    });
+
+                    userList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading user data:', error);
+                userList.innerHTML = '<li style="color:red; padding:10px; list-style:none;">Error loading users</li>';
             });
-        </script>
-    </body>
+
+        // Click away handler to dismiss the dropdown menu
+        window.addEventListener('click', () => {
+            userList.style.display = 'none';
+        });
+    });
+</script>
+</body>
 </html>
