@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>AI Usage Monitor</title>
+        <link href="main.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="topnavcontainer">
+            <div class="navGroup"> 
+                <nav>
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a> 
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="playground.html">Playground</a>
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a> 
+                </nav>
+               </div>
+               <div class="text">
+                <h1>AI Usage Monitor</h1>
+            </div>  
+        </div>
+        <h2 style="font-weight: bold;">Select an account:</h2>
+        <div class="login-wrapper">
+        <div id="login-container" class="login-form">
+        <p class="dropdown-header">Select an account:</p>
+            <ul id="user-list">
+                <!-- Usernames will be injected here -->
+            </ul>
+        <button id="login-button">Switch</button>
+        </div>
+        </div>
+        </div>
+        <script>
+            const loginButton = document.getElementById('login-button');
+            const loginContainer = document.getElementById('login-container');
+            const userList = document.getElementById('user-list');
+
+
+            loginButton.addEventListener('click', () => {
+                loginContainer.classList.toggle('open');});
+
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                userList.innerHTML = ''; 
+
+            data.students.forEach(student => {
+            const li = document.createElement('li');
+            li.classList.add('user-item');
+            li.textContent = student.user_name; // Displays the user_name string
+
+            // Handle what happens when a sample account is selected
+            li.addEventListener('click', () => {
+            console.log(`Logged in as: ${student.user_name} (ID: ${student.id})`);
+            loginButton.innerHTML = `${student.user_name} ▼`;
+            loginContainer.classList.remove('open');
+            });
+            userList.appendChild(li);});})
+            .catch(error => {
+            console.error('Error loading user data:', error);
+            userList.innerHTML = '<li class="user-item" style="color:red;">Error loading users</li>';});
+            window.addEventListener('click', (e) => {
+            if (!loginButton.contains(e.target) && !loginContainer.contains(e.target)) {
+            loginContainer.classList.remove('open');
+            }
+            });
+        </script>
+    </body>
+</html>
