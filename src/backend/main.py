@@ -257,7 +257,7 @@ def get_cost(model: str):
 def get_students():
     """Return a list of all students with their IDs, usernames and usage data."""
     students = data_structure.get("students", [])
-    return [{
+    return {"students": [{
                 "id": student.get("id"),
                 "user_name": student.get("user_name"),
                 "token_usage": get_student_usage(student.get("id"))["usage"],
@@ -265,7 +265,7 @@ def get_students():
                 "chat_categories_usage": get_student_chat_categories_usage(student.get("id"))["chat_categories_usage"],
                 "models_usage": get_student_models_usage(student.get("id"))["models_usage"],
                 
-            } for student in students]
+            } for student in students]}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=1764)
