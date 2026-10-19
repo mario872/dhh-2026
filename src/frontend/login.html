@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>AI Usage Monitor</title>
@@ -77,11 +76,17 @@
             e.stopPropagation();
         });
 
-        // Fetch the student array from your backend API
+        // Fetch the data from your backend API
         fetch('http://127.0.0.1:8000/students')
             .then(response => response.json())
-            .then(studentsArray => {
+            .then(apiResponse => {
+                console.log(apiResponse);
                 userList.innerHTML = '';
+
+                // FIX: Check if response is an array. If it's an object, safely convert it.
+                const studentsArray = Array.isArray(apiResponse) 
+                    ? apiResponse 
+                    : (apiResponse.students || apiResponse.data || Object.values(apiResponse));
 
                 if (!Array.isArray(studentsArray) || studentsArray.length === 0) {
                     userList.innerHTML = '<li style="color:gray; padding:12px 15px; font-family:sans-serif; list-style:none;">No accounts found</li>';
@@ -90,6 +95,9 @@
 
                 // Cleanly loop through each student object in the response array
                 studentsArray.forEach(student => {
+                    // Skip if the item doesn't look like a student object or lacks a name
+                    if (!student || typeof student !== 'object' || !student.user_name) return;
+
                     const li = document.createElement('li');
                     
                     // Directly pull the "user_name" property from the API object
