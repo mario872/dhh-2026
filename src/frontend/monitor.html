@@ -37,37 +37,52 @@
                 <span class="box-value" id="message-cost">...</span>
             </div>
         </div>
-        <script>
-            // Adjust this ID dynamically based on your logged-in session later
-            const CURRENT_STUDENT_ID = 10001; 
+       <script>
+    // 1. Retrieve the session payload from localStorage
+    const sessionData = localStorage.getItem('currentUser');
+    
+    // 2. Enforce authentication safeguard context
+    if (!sessionData) {
+        // Kick unauthenticated traffic back to login
+        alert('Please log in first.');
+        window.location.href = 'login.html';
+    }
 
-            async function loadUsageData() {
-                try {
-                    const response = await fetch(`http://127.0.0.1:8000/student/${CURRENT_STUDENT_ID}/usage`);
-                    
-                    if (!response.ok) {
-                        throw new Error('Could not fetch student usage details');
-                    }
+    // 3. Parse data safely to grab the dynamic database identifier 
+    const currentUser = JSON.parse(sessionData);
+    const CURRENT_STUDENT_ID = currentUser.id; 
 
-                    const data = await response.json();
-                    const usage = data.usage;
-                    const totalMessages = usage.user.all.length;
-                    const waterEstimation = usage.raw_tokens * 0.002;
+    // Optional: Personalise your UI by showing their name somewhere
+    console.log(`Loading metrics data context dynamically for: ${currentUser.user_name}`);
 
-                    document.getElementById('messages-sent').innerText = totalMessages;
-                    document.getElementById('tokens-used').innerText = usage.raw_tokens.toLocaleString();
-                    document.getElementById('water-used').innerText = waterEstimation.toFixed(1);
-                    document.getElementById('message-cost').innerText = `$${usage.cost.toFixed(4)}`;
-
-                } catch (error) {
-                    console.error("Error connecting to backend API:", error);
-                    document.getElementById('messages-sent').innerText = 'Err';
-                    document.getElementById('tokens-used').innerText = 'Err';
-                    document.getElementById('water-used').innerText = 'Err';
-                    document.getElementById('message-cost').innerText = 'Err';
-                }
+    async function loadUsageData() {
+        try {
+            // Inject the dynamic ID straight into the API URL string
+            const response = await fetch(`http://127.0.0.1:8000/student/${CURRENT_STUDENT_ID}/usage`);
+            
+            if (!response.ok) {
+                throw new Error('Could not fetch student usage details');
             }
-            window.addEventListener('DOMContentLoaded', loadUsageData);
-        </script>
+
+            const data = await response.json();
+            const usage = data.usage;
+            const totalMessages = usage.user.all.length;
+            const waterEstimation = usage.raw_tokens * 0.002;
+
+            document.getElementById('messages-sent').innerText = totalMessages;
+            document.getElementById('tokens-used').innerText = usage.raw_tokens.toLocaleString();
+            document.getElementById('water-used').innerText = waterEstimation.toFixed(1);
+            document.getElementById('message-cost').innerText = `$${usage.cost.toFixed(4)}`;
+
+        } catch (error) {
+            console.error("Error connecting to backend API:", error);
+            document.getElementById('messages-sent').innerText = 'Err';
+            document.getElementById('tokens-used').innerText = 'Err';
+            document.getElementById('water-used').innerText = 'Err';
+            document.getElementById('message-cost').innerText = 'Err';
+        }
+    }
+    window.addEventListener('DOMContentLoaded', loadUsageData);
+    </script>
     </body>
 </html>
