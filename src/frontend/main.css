@@ -38,7 +38,7 @@ h2 {
     color: #0c4c34;
     width: 93.75%;
     text-align: center;
-    padding: 2.08% 2.08% 2.08% 2.08%;
+    padding: 2.08% 2.08% 1.04% 2.08%;
     margin-left: 1.04%;
     margin-right: 1.04%;
     margin-bottom: 0%;
@@ -62,7 +62,7 @@ h3 {
 p {
     margin-top: 0px;
     background-color: #0c4c34;
-    color: rgb(0, 0, 0);
+    color: white;
     width: 93.75%;
     padding: 2.08% 2.08%;
     margin-top: 0.69%;
