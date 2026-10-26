@@ -106,3 +106,12 @@ p {
   margin-top: 8px; 
   font-family: roboto;
 }
+
+.logincontainer {
+  background-color: #bcbcbc;
+  color: black;
+  padding: 20px;
+  text-align: center;
+  border-radius: 4px;
+  font-family: roboto;
+}
