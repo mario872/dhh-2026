@@ -21,17 +21,13 @@
     <h2 style="font-weight: bold;">Log In to Your Account:</h2>
     
     <div class="login-wrapper" style="font-family: sans-serif; max-width: 300px; align-items: center;">
-        <!-- Account Dropdown Selector -->
         <div id="login-container" class="login-form" style="margin-bottom: 15px; align-items: center;">
-            <button id="login-button" style="width: 240px; padding: 10px; align-items: center; justify-content: space-between; cursor: pointer;">
-                <span>Select an account ▼</span>
-            </button>
-            <ul id="user-list">
-                <!-- Usernames will be injected here -->
-            </ul>
+            <label for="account-input" style="display: block; margin-bottom: 6px; font-size: 0.9rem; font-weight: bold;">Account:</label>
+            <input id="account-input" type="text" list="user-list" placeholder="Start typing your username" autocomplete="off" style="box-sizing: border-box; width: 240px; padding: 10px; border: 1px solid #bcbcbc; border-radius: 4px;">
+            <datalist id="user-list"></datalist>
+            <div id="account-message" role="status" style="font-size: 0.9rem; margin-top: 5px;"></div>
         </div>
 
-        <!-- Password Field & Submit (Hidden until account is picked) -->
         <div id="password-container" style="display: none; flex-direction: column; gap: 10px; width: 240px;">
             <label for="password-input" style="font-size: 0.9rem; font-weight: bold;">Password:</label>
             <input type="password" id="password-input" placeholder="Enter password" style="padding: 10px; border: 1px solid #bcbcbc; border-radius: 4px;">
@@ -44,9 +40,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const loginButton = document.getElementById('login-button');
-            const loginContainer = document.getElementById('login-container');
+            const accountInput = document.getElementById('account-input');
             const userList = document.getElementById('user-list');
+            const accountMessage = document.getElementById('account-message');
             
             const passwordContainer = document.getElementById('password-container');
             const passwordInput = document.getElementById('password-input');
@@ -54,97 +50,63 @@
             const loginMessage = document.getElementById('login-message');
             
             let selectedUser = null;
+            let students = [];
 
-            if (!loginButton || !loginContainer || !userList) return;
+            if (!accountInput || !userList || !accountMessage || !passwordContainer || !passwordInput || !submitLogin || !loginMessage) return;
 
-            // Anchor the container layout context
-            loginContainer.style.position = 'relative';
-            loginContainer.style.display = 'inline-block';
+            function updateAccountSelection() {
+                const username = accountInput.value.trim().toLowerCase();
+                const matchingUser = students.find(student => student.user_name.toLowerCase() === username) || null;
 
-            // Force-style the user-list container dropdown window
-            userList.style.display = 'none';
-            userList.style.position = 'absolute';
-            userList.style.top = '100%';
-            userList.style.left = '0';
-            userList.style.width = '240px';
-            userList.style.zIndex = '99999';
-            userList.style.backgroundColor = '#ffffff';
-            userList.style.border = '1px solid #bcbcbc';
-            userList.style.borderRadius = '0 0 4px 4px';
-            userList.style.listStyle = 'none';
-            userList.style.listStyleType = 'none';
-            userList.style.padding = '0';
-            userList.style.margin = '2px 0 0 0';
-            userList.style.maxHeight = '200px';
-            userList.style.overflowY = 'auto';
-            userList.style.boxShadow = '0px 4px 12px rgba(0, 0, 0, 0.2)';
+                if (matchingUser !== selectedUser) {
+                    selectedUser = matchingUser;
+                    passwordInput.value = '';
+                    loginMessage.textContent = '';
+                }
 
-            // Toggle dropdown functionality
-            loginButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userList.style.display = userList.style.display === 'block' ? 'none' : 'block';
-            });
+                passwordContainer.style.display = selectedUser ? 'flex' : 'none';
+            }
 
-            userList.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-
-            // Fetch the data from your backend API
             fetch('http://127.0.0.1:8000/students')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Could not load accounts');
+                    return response.json();
+                })
                 .then(apiResponse => {
-                    userList.innerHTML = '';
-
                     const studentsArray = Array.isArray(apiResponse) ? apiResponse : (apiResponse.students || apiResponse.data || Object.values(apiResponse));
                     
                     if (!Array.isArray(studentsArray) || studentsArray.length === 0) {
-                        userList.innerHTML = '<li style="color:gray; padding:12px 15px; font-family:sans-serif; list-style:none;">No accounts found</li>';
+                        accountMessage.style.color = 'red';
+                        accountMessage.textContent = 'No accounts found.';
                         return;
                     }
 
-                    studentsArray.forEach(student => {
-                        if (!student || typeof student !== 'object' || !student.user_name) return;
+                    students = studentsArray.filter(student =>
+                        student && typeof student === 'object' && typeof student.user_name === 'string'
+                    );
 
-                        const li = document.createElement('li');
-                        li.textContent = student.user_name;
-
-                        li.style.display = 'block';
-                        li.style.width = '100%';
-                        li.style.boxSizing = 'border-box';
-                        li.style.padding = '12px 15px';
-                        li.style.cursor = 'pointer';
-                        li.style.color = '#000000';
-                        li.style.backgroundColor = '#ffffff';
-                        li.style.textAlign = 'left';
-                        li.style.fontSize = '1rem';
-                        li.style.fontFamily = 'sans-serif';
-                        li.style.borderBottom = '1px solid #f0f0f0';
-                        li.style.listStyleType = 'none';
-
-                        li.addEventListener('mouseenter', () => { li.style.backgroundColor = '#f5f5f5'; });
-                        li.addEventListener('mouseleave', () => { li.style.backgroundColor = '#ffffff'; });
-
-                        li.addEventListener('click', () => {
-                            selectedUser = student;
-                            
-                            loginButton.innerHTML = `<span>${student.user_name}</span> <span>▼</span>`;
-                            userList.style.display = 'none';
-                            
-                            passwordContainer.style.display = 'flex';
-                            passwordInput.value = '';
-                            loginMessage.textContent = '';
-                            passwordInput.focus();
-                        });
-
-                        userList.appendChild(li);
+                    students.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.user_name;
+                        userList.appendChild(option);
                     });
+
+                    if (students.length === 0) {
+                        accountMessage.style.color = 'red';
+                        accountMessage.textContent = 'No accounts found.';
+                    }
+                    updateAccountSelection();
                 })
                 .catch(error => {
                     console.error('Error loading user data:', error);
-                    userList.innerHTML = '<li style="color:red; padding:10px; list-style:none;">Error loading users</li>';
+                    accountMessage.style.color = 'red';
+                    accountMessage.textContent = 'Error loading accounts. Please try again later.';
                 });
 
-            // Password Submission, Session Storage, and Redirect Logic
+            accountInput.addEventListener('input', () => {
+                updateAccountSelection();
+            });
+
             submitLogin.addEventListener('click', () => {
                 if (!selectedUser) return;
 
@@ -171,10 +133,6 @@
                 if (e.key === 'Enter') {
                     submitLogin.click();
                 }
-            });
-
-            window.addEventListener('click', () => {
-                userList.style.display = 'none';
             });
         });
     </script>
