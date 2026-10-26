@@ -1,148 +1,182 @@
 <html lang="en">
-    <head>
-        <title>AI Usage Monitor</title>
-        <link href="main.css" rel="stylesheet">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
+<head>
+    <title>AI Usage Monitor</title>
+    <link href="main.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
     <div class="topnavcontainer">
-        <div class="navGroup"> 
+        <div class="navGroup">
             <nav>
-                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a> 
+                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a>
                 <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="playground.html">Playground</a>
-                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a> 
+                <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a>
             </nav>
         </div>
         <div class="text">
             <h1>AI Usage Monitor</h1>
-        </div>  
+        </div>
     </div>
 
-    <h2 style="font-weight: bold;">Select an account:</h2>
+    <h2 style="font-weight: bold;">Log In to Your Account:</h2>
     
-    <div class="login-wrapper">
-        <div id="login-container" class="login-form">
-        <!-- 1. The trigger button is now on top -->
-            <button id="login-button">Switch ▼</button>
-        
-        <!-- 2. The floating menu list sits directly beneath it -->
+    <div class="login-wrapper" style="font-family: sans-serif; max-width: 300px;">
+        <!-- Account Dropdown Selector -->
+        <div id="login-container" class="login-form" style="margin-bottom: 15px;">
+            <button id="login-button" style="width: 240px; padding: 10px; text-align: left; display: flex; justify-content: space-between; cursor: pointer;">
+                <span>Select an account ▼</span>
+            </button>
             <ul id="user-list">
-            <!-- Usernames will be injected here -->
+                <!-- Usernames will be injected here -->
             </ul>
+        </div>
+
+        <!-- Password Field & Submit (Hidden until account is picked) -->
+        <div id="password-container" style="display: none; flex-direction: column; gap: 10px; width: 240px;">
+            <label for="password-input" style="font-size: 0.9rem; font-weight: bold;">Password:</label>
+            <input type="password" id="password-input" placeholder="Enter password" style="padding: 10px; border: 1px solid #bcbcbc; border-radius: 4px;">
+            <button id="submit-login" style="padding: 10px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                Sign In
+            </button>
+            <div id="login-message" style="font-size: 0.9rem; margin-top: 5px;"></div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginButton = document.getElementById('login-button');
-        const loginContainer = document.getElementById('login-container');
-        const userList = document.getElementById('user-list');
-        
-        if (!loginButton || !loginContainer || !userList) return;
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginButton = document.getElementById('login-button');
+            const loginContainer = document.getElementById('login-container');
+            const userList = document.getElementById('user-list');
+            
+            const passwordContainer = document.getElementById('password-container');
+            const passwordInput = document.getElementById('password-input');
+            const submitLogin = document.getElementById('submit-login');
+            const loginMessage = document.getElementById('login-message');
+            
+            let selectedUser = null;
 
-        // Anchor the container layout context
-        loginContainer.style.position = 'relative';
-        loginContainer.style.display = 'inline-block';
+            if (!loginButton || !loginContainer || !userList) return;
 
-        // Force-style the user-list container dropdown window
-        userList.style.display = 'none'; 
-        userList.style.position = 'absolute';
-        userList.style.top = '100%';
-        userList.style.left = '0';
-        userList.style.width = '240px';
-        userList.style.zIndex = '99999';
-        userList.style.backgroundColor = '#ffffff';
-        userList.style.border = '1px solid #bcbcbc';
-        userList.style.borderRadius = '0 0 4px 4px';
-        userList.style.listStyle = 'none'; 
-        userList.style.listStyleType = 'none';
-        userList.style.padding = '0';
-        userList.style.margin = '2px 0 0 0';
-        userList.style.maxHeight = '200px';
-        userList.style.overflowY = 'auto';
-        userList.style.boxShadow = '0px 4px 12px rgba(0, 0, 0, 0.2)';
+            // Anchor the container layout context
+            loginContainer.style.position = 'relative';
+            loginContainer.style.display = 'inline-block';
 
-        // Toggle dropdown functionality
-        loginButton.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            if (userList.style.display === 'block') {
-                userList.style.display = 'none';
-            } else {
-                userList.style.display = 'block';
-            }
-        });
+            // Force-style the user-list container dropdown window
+            userList.style.display = 'none';
+            userList.style.position = 'absolute';
+            userList.style.top = '100%';
+            userList.style.left = '0';
+            userList.style.width = '240px';
+            userList.style.zIndex = '99999';
+            userList.style.backgroundColor = '#ffffff';
+            userList.style.border = '1px solid #bcbcbc';
+            userList.style.borderRadius = '0 0 4px 4px';
+            userList.style.listStyle = 'none';
+            userList.style.listStyleType = 'none';
+            userList.style.padding = '0';
+            userList.style.margin = '2px 0 0 0';
+            userList.style.maxHeight = '200px';
+            userList.style.overflowY = 'auto';
+            userList.style.boxShadow = '0px 4px 12px rgba(0, 0, 0, 0.2)';
 
-        userList.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-
-        // Fetch the data from your backend API
-        fetch('http://127.0.0.1:8000/students')
-            .then(response => response.json())
-            .then(apiResponse => {
-                console.log(apiResponse);
-                userList.innerHTML = '';
-
-                // FIX: Check if response is an array. If it's an object, safely convert it.
-                const studentsArray = Array.isArray(apiResponse) 
-                    ? apiResponse 
-                    : (apiResponse.students || apiResponse.data || Object.values(apiResponse));
-
-                if (!Array.isArray(studentsArray) || studentsArray.length === 0) {
-                    userList.innerHTML = '<li style="color:gray; padding:12px 15px; font-family:sans-serif; list-style:none;">No accounts found</li>';
-                    return;
-                }
-
-                // Cleanly loop through each student object in the response array
-                studentsArray.forEach(student => {
-                    // Skip if the item doesn't look like a student object or lacks a name
-                    if (!student || typeof student !== 'object' || !student.user_name) return;
-
-                    const li = document.createElement('li');
-                    
-                    // Directly pull the "user_name" property from the API object
-                    li.textContent = student.user_name;
-
-                    // Layout & hit-box styling
-                    li.style.display = 'block';         
-                    li.style.width = '100%';            
-                    li.style.boxSizing = 'border-box';  
-                    li.style.padding = '12px 15px';     
-                    li.style.cursor = 'pointer';        
-                    li.style.color = '#000000';         
-                    li.style.backgroundColor = '#ffffff';
-                    li.style.textAlign = 'left';
-                    li.style.fontSize = '1rem';
-                    li.style.fontFamily = 'sans-serif';
-                    li.style.borderBottom = '1px solid #f0f0f0';
-                    li.style.listStyleType = 'none';
-
-                    // Hover styling animations
-                    li.addEventListener('mouseenter', () => { li.style.backgroundColor = '#f5f5f5'; });
-                    li.addEventListener('mouseleave', () => { li.style.backgroundColor = '#ffffff'; });
-
-                    // Click account selection behavior
-                    li.addEventListener('click', () => {
-                        console.log(`Logged in as: ${student.user_name} (ID: ${student.id})`);
-                        
-                        // Update the button text to display the chosen user_name
-                        loginButton.innerHTML = `<span>${student.user_name}</span> <span>▼</span>`;
-                        userList.style.display = 'none';
-                    });
-
-                    userList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading user data:', error);
-                userList.innerHTML = '<li style="color:red; padding:10px; list-style:none;">Error loading users</li>';
+            // Toggle dropdown functionality
+            loginButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userList.style.display = userList.style.display === 'block' ? 'none' : 'block';
             });
 
-        // Click away handler to dismiss the dropdown menu
-        window.addEventListener('click', () => {
-            userList.style.display = 'none';
+            userList.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Fetch the data from your backend API
+            fetch('http://127.0.0.1:8000/students')
+                .then(response => response.json())
+                .then(apiResponse => {
+                    userList.innerHTML = '';
+
+                    const studentsArray = Array.isArray(apiResponse) ? apiResponse : (apiResponse.students || apiResponse.data || Object.values(apiResponse));
+                    
+                    if (!Array.isArray(studentsArray) || studentsArray.length === 0) {
+                        userList.innerHTML = '<li style="color:gray; padding:12px 15px; font-family:sans-serif; list-style:none;">No accounts found</li>';
+                        return;
+                    }
+
+                    studentsArray.forEach(student => {
+                        if (!student || typeof student !== 'object' || !student.user_name) return;
+
+                        const li = document.createElement('li');
+                        li.textContent = student.user_name;
+
+                        li.style.display = 'block';
+                        li.style.width = '100%';
+                        li.style.boxSizing = 'border-box';
+                        li.style.padding = '12px 15px';
+                        li.style.cursor = 'pointer';
+                        li.style.color = '#000000';
+                        li.style.backgroundColor = '#ffffff';
+                        li.style.textAlign = 'left';
+                        li.style.fontSize = '1rem';
+                        li.style.fontFamily = 'sans-serif';
+                        li.style.borderBottom = '1px solid #f0f0f0';
+                        li.style.listStyleType = 'none';
+
+                        li.addEventListener('mouseenter', () => { li.style.backgroundColor = '#f5f5f5'; });
+                        li.addEventListener('mouseleave', () => { li.style.backgroundColor = '#ffffff'; });
+
+                        li.addEventListener('click', () => {
+                            selectedUser = student;
+                            
+                            loginButton.innerHTML = `<span>${student.user_name}</span> <span>▼</span>`;
+                            userList.style.display = 'none';
+                            
+                            passwordContainer.style.display = 'flex';
+                            passwordInput.value = '';
+                            loginMessage.textContent = '';
+                            passwordInput.focus();
+                        });
+
+                        userList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading user data:', error);
+                    userList.innerHTML = '<li style="color:red; padding:10px; list-style:none;">Error loading users</li>';
+                });
+
+            // Password Submission, Session Storage, and Redirect Logic
+            submitLogin.addEventListener('click', () => {
+                if (!selectedUser) return;
+
+                if (passwordInput.value === '1234') {
+                    loginMessage.style.color = 'green';
+                    loginMessage.textContent = 'Success! Redirecting...';
+                    
+                    // Save user payload to localStorage
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: selectedUser.id,
+                        user_name: selectedUser.user_name,
+                        loggedInAt: new Date().toISOString()
+                    }));
+
+                    // Immediate redirect to monitor page
+                    window.location.href = 'monitor.html';
+                } else {
+                    loginMessage.style.color = 'red';
+                    loginMessage.textContent = 'Incorrect password. Hint: Try 1234';
+                }
+            });
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    submitLogin.click();
+                }
+            });
+
+            window.addEventListener('click', () => {
+                userList.style.display = 'none';
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
