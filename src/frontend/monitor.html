@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>AI Usage Monitor</title>
@@ -19,6 +18,7 @@
             </div>  
         </div>
         <h2 style="font-weight: bold;">Your Usage This Month</h2>
+        <h3 style="font-weight: bold;" id="username">...</h3>
         <div class="grid-container">
             <div class="box">
                 <span class="box-heading">Messages Sent</span><br/>
@@ -51,6 +51,7 @@
     // 3. Parse data safely to grab the dynamic database identifier 
     const currentUser = JSON.parse(sessionData);
     const CURRENT_STUDENT_ID = currentUser.id; 
+    const currentName = currentUser.user_name
 
     // Optional: Personalise your UI by showing their name somewhere
     console.log(`Loading metrics data context dynamically for: ${currentUser.user_name}`);
@@ -73,6 +74,7 @@
             document.getElementById('tokens-used').innerText = usage.raw_tokens.toLocaleString();
             document.getElementById('water-used').innerText = waterEstimation.toFixed(1);
             document.getElementById('message-cost').innerText = `$${usage.cost.toFixed(4)}`;
+            document.getElementById('username').innerText = currentName;
 
         } catch (error) {
             console.error("Error connecting to backend API:", error);
