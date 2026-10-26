@@ -2,7 +2,7 @@
 
 div.topnavcontainer {
     height: 17.12%;
-    background-color: #bcbcbc;
+    background-color: #0c4c34;
     padding: 0%;
 }
 h1 {
@@ -11,12 +11,12 @@ h1 {
     font-size: 200%;
     font-family: roboto;
     vertical-align: middle;
-    color: black;
+    color: white;
     align-items: middle;
   }
 nav {
     font-family: roboto;
-    color: black;
+    color: white;
     align-items: middle;
     display: inline-table;
     width: 100%;
@@ -29,13 +29,13 @@ nav {
     padding-left: 0%;
   }
 a {
-    color: rgb(0,0,0);
+    color: white;
     text-decoration: none;
     font-size: 100%;
   }
 h2 {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+    background-color: white;
+    color: #0c4c34;
     width: 93.75%;
     text-align: center;
     padding: 2.08% 2.08% 2.08% 2.08%;
@@ -47,8 +47,8 @@ h2 {
     font-family: roboto;
   }
 h3 {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+    background-color: white;
+    color: #0c4c34;
     width: 93.75%;
     text-align: center;
     padding: 0% 2.08% 2.08% 2.08%;
@@ -61,7 +61,7 @@ h3 {
   }
 p {
     margin-top: 0px;
-    background-color: #bcbcbc;
+    background-color: #0c4c34;
     color: rgb(0, 0, 0);
     width: 93.75%;
     padding: 2.08% 2.08%;
@@ -82,8 +82,8 @@ p {
 }
 
 .box {
-  background-color: #bcbcbc;
-  color: black;
+  background-color: #0c4c34;
+  color: white;
   padding: 20px;
   text-align: center;
   border-radius: 4px;
@@ -94,7 +94,7 @@ p {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: black;
+  color: white;
   font-weight: 600;
   font-family: roboto;
 }
@@ -102,16 +102,7 @@ p {
 .box-value {
   font-size: 1.75rem; 
   font-weight: 700;
-  color: black;
+  color: white;
   margin-top: 8px; 
-  font-family: roboto;
-}
-
-.logincontainer {
-  background-color: #bcbcbc;
-  color: black;
-  padding: 20px;
-  text-align: center;
-  border-radius: 4px;
   font-family: roboto;
 }
