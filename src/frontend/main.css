@@ -78,6 +78,32 @@ p {
     align-self: center;
     font-family: roboto;
   }
+ul {
+    margin-top: 0px;
+    background-color: #0c4c34;
+    color: white;
+    width: 93.75%;
+    padding: 2.08% 2.08%;
+    margin-top: 0.69%;
+    margin-left: 1.04%;
+    margin-right: 1.04%;
+    text-align: center;
+    align-self: center;
+    font-family: roboto;
+  }
+li {
+    margin-top: 0px;
+    background-color: #0c4c34;
+    color: white;
+    width: 93.75%;
+    margin-left: 1.04%;
+    margin-right: 1.04%;
+    font-family: roboto;
+  }
+pre {
+  white-space: pre-wrap;     
+  overflow-wrap: break-word; 
+}
 .grid-container {
   display: grid;
   width: 90%;
