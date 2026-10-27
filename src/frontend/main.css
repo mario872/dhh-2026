@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto');
 
+img {
+    width: 6.25%;
+    float: left;
+    padding-right: 1.39%;
+    padding-left: 1.39%;
+    padding-top: 1.04%;
+}
 div.topnavcontainer {
     height: 17.12%;
     background-color: #0c4c34;
