@@ -103,6 +103,10 @@ li {
 pre {
   white-space: pre-wrap;     
   overflow-wrap: break-word; 
+  margin-left: 1.04%;
+  margin-right: 1.04%;
+  text-align: center;
+  align-self: center;
 }
 .grid-container {
   display: grid;
