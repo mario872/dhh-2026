@@ -55,6 +55,12 @@
             let selectedUser = null;
             let students = [];
 
+            localStorage.setItem('currentUser', JSON.stringify({
+                        id: '',
+                        user_name: '',
+                        loggedInAt: 'N/A'
+                    }));
+
             if (!accountInput || !userList || !accountMessage || !passwordContainer || !passwordInput || !submitLogin || !loginMessage) return;
 
             function updateAccountSelection() {
@@ -117,17 +123,15 @@
                     loginMessage.style.color = 'green';
                     loginMessage.textContent = 'Success! Redirecting...';
                     
-                    // Save user payload to localStorage
                     localStorage.setItem('currentUser', JSON.stringify({
                         id: selectedUser.id,
                         user_name: selectedUser.user_name,
                         loggedInAt: new Date().toISOString()
                     }));
 
-                    // Immediate redirect to monitor page
                     window.location.href = 'monitor.html';
                 }
-                    if (passwordInput.value === '2345') {
+                if (passwordInput.value === '2345') {
                     loginMessage.style.color = 'green';
                     loginMessage.textContent = 'Success! Redirecting...';
                     

@@ -55,12 +55,6 @@
     const CURRENT_STUDENT_ID = currentUser.id; 
     const currentName = currentUser.user_name
 
-    if (currentUser.id=1) {
-        // Kick unauthenticated traffic back to login
-        alert('Redirecting to admin');
-        window.location.href = 'admin.html';
-    }
-
     // Optional: Personalise your UI by showing their name somewhere
     console.log(`Loading metrics data context dynamically for: ${currentUser.user_name}`);
 
