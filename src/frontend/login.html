@@ -126,23 +126,24 @@
 
                     // Immediate redirect to monitor page
                     window.location.href = 'monitor.html';
-                } else{ 
+                }
                     if (passwordInput.value === '2345') {
                     loginMessage.style.color = 'green';
                     loginMessage.textContent = 'Success! Redirecting...';
                     
                     localStorage.setItem('currentUser', JSON.stringify({
                         id: 1,
-                        user_name: admin,
+                        user_name: 'admin',
                         loggedInAt: new Date().toISOString()
                     }));
 
                     window.location.href = 'admin.html';
-                } else {
+                    }
+                else {
                     loginMessage.style.color = 'red';
                     loginMessage.textContent = 'Incorrect password. Hint: Try 1234';
                 }
-            }});
+            });
             
             passwordInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
