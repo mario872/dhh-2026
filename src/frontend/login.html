@@ -54,12 +54,15 @@
             
             let selectedUser = null;
             let students = [];
+            const demoAdmin = { id: 1, user_name: 'admin' };
 
             if (!accountInput || !userList || !accountMessage || !passwordContainer || !passwordInput || !submitLogin || !loginMessage) return;
 
             function updateAccountSelection() {
                 const username = accountInput.value.trim().toLowerCase();
-                const matchingUser = students.find(student => student.user_name.toLowerCase() === username) || null;
+                const matchingUser = username === demoAdmin.user_name
+                    ? demoAdmin
+                    : students.find(student => student.user_name.toLowerCase() === username) || null;
 
                 if (matchingUser !== selectedUser) {
                     selectedUser = matchingUser;
@@ -113,7 +116,12 @@
             submitLogin.addEventListener('click', () => {
                 if (!selectedUser) return;
 
-                if (passwordInput.value === '1234') {
+                const isAdmin = selectedUser.user_name === demoAdmin.user_name;
+                const validPassword = isAdmin
+                    ? passwordInput.value === '2345'
+                    : passwordInput.value === '1234';
+
+                if (validPassword) {
                     loginMessage.style.color = 'green';
                     loginMessage.textContent = 'Success! Redirecting...';
                     
@@ -124,11 +132,12 @@
                         loggedInAt: new Date().toISOString()
                     }));
 
-                    // Immediate redirect to monitor page
-                    window.location.href = 'monitor.html';
+                    window.location.href = isAdmin ? 'admin.html' : 'monitor.html';
                 } else {
                     loginMessage.style.color = 'red';
-                    loginMessage.textContent = 'Incorrect password. Hint: Try 1234';
+                    loginMessage.textContent = isAdmin
+                        ? 'Incorrect password.'
+                        : 'Incorrect password. Hint: Try 1234';
                 }
             });
 
