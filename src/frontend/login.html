@@ -54,15 +54,12 @@
             
             let selectedUser = null;
             let students = [];
-            const demoAdmin = { id: 1, user_name: 'admin' };
 
             if (!accountInput || !userList || !accountMessage || !passwordContainer || !passwordInput || !submitLogin || !loginMessage) return;
 
             function updateAccountSelection() {
                 const username = accountInput.value.trim().toLowerCase();
-                const matchingUser = username === demoAdmin.user_name
-                    ? demoAdmin
-                    : students.find(student => student.user_name.toLowerCase() === username) || null;
+                const matchingUser = students.find(student => student.user_name.toLowerCase() === username) || null;
 
                 if (matchingUser !== selectedUser) {
                     selectedUser = matchingUser;
@@ -116,12 +113,7 @@
             submitLogin.addEventListener('click', () => {
                 if (!selectedUser) return;
 
-                const isAdmin = selectedUser.user_name === demoAdmin.user_name;
-                const validPassword = isAdmin
-                    ? passwordInput.value === '2345'
-                    : passwordInput.value === '1234';
-
-                if (validPassword) {
+                if (passwordInput.value === '1234') {
                     loginMessage.style.color = 'green';
                     loginMessage.textContent = 'Success! Redirecting...';
                     
@@ -132,12 +124,25 @@
                         loggedInAt: new Date().toISOString()
                     }));
 
-                    window.location.href = isAdmin ? 'admin.html' : 'monitor.html';
+                    // Immediate redirect to monitor page
+                    window.location.href = 'monitor.html';
+                    if (passwordInput.value === '2345') {
+                    loginMessage.style.color = 'green';
+                    loginMessage.textContent = 'Success! Redirecting...';
+                    
+                    // Save user payload to localStorage
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: 1,
+                        user_name: admin,
+                        loggedInAt: new Date().toISOString()
+                    }));
+
+                    // Immediate redirect to monitor page
+                    window.location.href = 'admin.html';
+                }
                 } else {
                     loginMessage.style.color = 'red';
-                    loginMessage.textContent = isAdmin
-                        ? 'Incorrect password.'
-                        : 'Incorrect password. Hint: Try 1234';
+                    loginMessage.textContent = 'Incorrect password. Hint: Try 1234';
                 }
             });
 
