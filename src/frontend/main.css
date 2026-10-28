@@ -124,6 +124,15 @@ pre {
   grid-template-columns: repeat(4, 1fr); 
 }
 
+.overall-data {
+  display: grid;
+  width: 90%;
+  padding-left: 5%;
+  padding-right: 5%;
+  column-gap: 2.5%;
+  grid-template-columns: repeat(2, 1fr); 
+}
+
 .box {
   background-color: #0c4c34;
   color: white;

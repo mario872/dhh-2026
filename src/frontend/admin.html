@@ -1,0 +1,211 @@
+<html lang="en">
+    <head>
+        <title>AI Usage Monitor</title>
+        <link href="main.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            /* Dynamic Responsive Data Table Styling */
+            .table-container {
+                margin: 30px 20px;
+                overflow-x: auto;
+                font-family: sans-serif;
+            }
+            .usage-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .usage-table th, .usage-table td {
+                border: 1px solid #ddd;
+                padding: 12px 15px;
+                text-align: left;
+            }
+            .usage-table th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+                color: #333;
+            }
+            .usage-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            .usage-table tr:hover {
+                background-color: #f1f1f1;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topnavcontainer">
+            <div class="image"> 
+                <a href="index.html"><img style="vertical-align:middle" src="icon.png"></a>
+            </div>
+            <div class="navGroup"> 
+                <nav>
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="monitor.html">Monitor</a> 
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="playground.html">Playground</a>
+                    <a style="padding-right: 8%; padding-left: 0%;" class="tnb-nav-btn" href="login.html">Login</a> 
+                </nav>
+               </div>
+               <div class="text">
+                <h1>AI Usage Monitor</h1>
+            </div>  
+        </div>
+
+        <h2 style="font-weight: bold; margin-left: 20px; margin-top: 20px;">Total student usage this month</h2>
+        <h3 style="font-weight: bold; margin-left: 20px;">Years 7-10</h3>
+    
+        <div class="overall-data">
+            <div class="box">
+                <span class="box-heading">Messages Sent</span><br/>
+                <span class="box-value" id="messages-sent">...</span>
+            </div>
+            <div class="box">
+                <span class="box-heading">Tokens Used</span><br/>
+                <span class="box-value" id="tokens-used">...</span>
+            </div>
+            <div class="box">
+                <span class="box-heading">Basic Model Prompts</span><br/>
+                <span class="box-value" id="basic-model-used">...</span>
+            </div>
+            <div class="box">
+                <span class="box-heading">Pro Model Prompts</span><br/>
+                <span class="box-value" id="pro-model-used">...</span>
+            </div>
+            <div class="box">
+                <span class="box-heading">Total Cost</span><br/>
+                <span class="box-value" id="message-cost">...</span>
+            </div>
+            <div class="box">
+                <span class="box-heading">Cost/1k tokens</span><br/>
+                <span class="box-value" id="average-cost">...</span>
+            </div>
+        </div>
+
+        <!-- Student-by-Student Live Data Rows Table -->
+        <div class="table-container">
+            <h2 style="font-weight: bold;">Student-by-Student Breakdowns</h2>
+            <table class="usage-table" id="studentUsageTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Username</th>
+                        <th>Messages Sent</th>
+                        <th>Total Tokens</th>
+                        <th>Basic Prompts</th>
+                        <th>Pro Prompts</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="7" style="text-align: center;">Loading student-by-student records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+       <script>
+    // 1. Retrieve the session payload from localStorage
+    const sessionData = localStorage.getItem('currentUser');
+    
+    // 2. Enforce authentication safeguard context
+    if (!sessionData) {
+        alert('Please log in first.');
+        window.location.href = 'login.html';
+    }
+
+    const currentUser = JSON.parse(sessionData);
+
+    if (currentUser.id != 1) {
+        alert('Redirecting to studentside');
+        window.location.href = 'monitor.html';
+    }
+
+    async function loadUsageData() {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/students`);
+            
+            if (!response.ok) {
+                throw new Error('Could not fetch student usage details');
+            }
+
+            const data = await response.json();
+            
+            // Extract the list of students array from the response object
+            const studentsList = data.students || [];
+
+            // Initialize global accumulators across ALL students for top summary cards
+            let grandTotalMessages = 0;
+            let grandTotalTokens = 0;
+            let grandTotalBasic = 0;
+            let grandTotalPro = 0;
+            let grandTotalCost = 0;
+
+            const tbody = document.querySelector('#studentUsageTable tbody');
+            tbody.innerHTML = ''; // Wipe loading placeholder
+
+            if (studentsList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No student logs tracked this month.</td></tr>`;
+                return;
+            }
+
+            // Loop and build custom table row length matching the explicit number of fetched students
+            studentsList.forEach(student => {
+                
+                // Extract metrics safely for this individual student
+                const tokenUsage = student.token_usage || {};
+                const userMessages = (tokenUsage.user && tokenUsage.user.all) ? tokenUsage.user.all.length : 0;
+                const rawTokens = tokenUsage.raw_tokens || 0;
+                const studentCost = tokenUsage.cost || 0;
+
+                // Extract basic and pro user prompt array counts from models_usage
+                const modelsUsage = student.models_usage || {};
+                const basicPrompts = (modelsUsage.basic && modelsUsage.basic.user && modelsUsage.basic.user.all) ? modelsUsage.basic.user.all.length : 0;
+                const proPrompts = (modelsUsage.pro && modelsUsage.pro.user && modelsUsage.pro.user.all) ? modelsUsage.pro.user.all.length : 0;
+
+                // Aggregate towards overall overview totals
+                grandTotalMessages += userMessages;
+                grandTotalTokens += rawTokens;
+                grandTotalBasic += basicPrompts;
+                grandTotalPro += proPrompts;
+                grandTotalCost += studentCost;
+
+                // Create a standard table row item for this student record
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.id}</td>
+                    <td><strong>${student.user_name}</strong></td>
+                    <td>${userMessages}</td>
+                    <td>${rawTokens.toLocaleString()}</td>
+                    <td>${basicPrompts}</td>
+                    <td>${proPrompts}</td>
+                    <td>$${studentCost.toFixed(4)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Update top metric boxes with unified data
+            document.getElementById('messages-sent').innerText = grandTotalMessages.toLocaleString();
+            document.getElementById('tokens-used').innerText = grandTotalTokens.toLocaleString();
+            document.getElementById('basic-model-used').innerText = grandTotalBasic.toLocaleString();
+            document.getElementById('pro-model-used').innerText = grandTotalPro.toLocaleString();
+            document.getElementById('message-cost').innerText = `$${grandTotalCost.toFixed(4)}`;
+            document.getElementById('average-cost').innerText = (grandTotalCost/(grandTotalTokens/1000)).toFixed(4);
+
+        } catch (error) {
+            console.error("Error connecting to backend API:", error);
+            document.getElementById('messages-sent').innerText = 'Err';
+            document.getElementById('tokens-used').innerText = 'Err';
+            document.getElementById('basic-model-used').innerText = 'Err';
+            document.getElementById('pro-model-used').innerText = 'Err';
+            document.getElementById('message-cost').innerText = 'Err';
+            document.getElementById('average-cost').innerText = 'Err';
+            
+            const tbody = document.querySelector('#studentUsageTable tbody');
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red;">Failed to build data rows due to API error.</td></tr>`;
+        }
+    }
+    window.addEventListener('DOMContentLoaded', loadUsageData);
+    </script>
+    </body>
+</html>
